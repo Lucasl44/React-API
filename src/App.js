@@ -1,25 +1,49 @@
-import logo from './logo.svg';
+import styled from "styled-components";
+import { useState, useEffect } from "react";
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+  const [data, setData] = useState({})
+  
+  useEffect(() => {
+    handleFetch();
+  }, [])
+  
+  useEffect(() => {
+    console.log("the quote changed");
+  }, [data])
 
+  const handleFetch = async () => {
+    let response = await fetch("https://uselessfacts.jsph.pl/random.json?language=en");
+    let data = await response.json();
+    setData(data);
+  };
+
+  return (
+    <StyledWrapper>
+      <h1>Useless Facts Generator</h1>
+      <button className="button" onClick={handleFetch}>New Fact</button>
+      <p className="output">{data.text}</p>
+    </StyledWrapper>
+  );
+};
+
+const StyledWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .button {
+    height: 50px;
+    width: 50%;
+    background-color: yellow;
+  }
+  .output {
+    width: 70%;
+    border: 2px solid black;
+    padding: 10px;
+    background-color: #0096FF;
+    text-align: center;
+  }
+`
 export default App;
+
